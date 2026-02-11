@@ -204,20 +204,32 @@ const users = [
 
 export const seedDatabase = async () => {
   try {
-    // Only seed if the database is empty
+    // Force reseed: clear and reseed to apply latest data
     const userCount = await User.countDocuments();
-    if (userCount > 0) {
-      console.log('📦 Database already seeded, skipping...');
+    const roomCount = await Room.countDocuments();
+
+    if (userCount > 0 && roomCount > 0) {
+      // Check if rooms need updating (e.g. fixed images)
+      await Room.deleteMany({});
+      await Room.create(rooms);
+      console.log('🔄 Rooms refreshed with latest data');
+
+      // Only skip user re-seed if users exist
+      console.log('📦 Users already exist, skipping user seed...');
       return;
     }
 
     console.log('🌱 Seeding database...');
 
-    await User.create(users);
-    console.log('   ✅ Users created');
+    if (userCount === 0) {
+      await User.create(users);
+      console.log('   ✅ Users created');
+    }
 
-    await Room.create(rooms);
-    console.log('   ✅ Rooms created');
+    if (roomCount === 0) {
+      await Room.create(rooms);
+      console.log('   ✅ Rooms created');
+    }
 
     console.log('🌱 Database seeded successfully!');
     console.log('   👤 Admin: admin@silada.com / admin123');
