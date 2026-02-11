@@ -57,7 +57,7 @@ const Register = () => {
               <span className="font-serif text-gold text-3xl font-bold">S</span>
             </div>
             <h1 className="font-serif text-3xl text-white mb-2">Create Account</h1>
-            <p className="text-gray-400 text-sm">Join Silada for an exclusive experience</p>
+            <p className="text-gray-400 text-sm">Join Siladan for an exclusive experience</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">

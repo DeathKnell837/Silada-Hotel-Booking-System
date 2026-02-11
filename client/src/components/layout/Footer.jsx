@@ -13,7 +13,7 @@ const Footer = () => {
                 <span className="font-serif text-gold text-xl font-bold">S</span>
               </div>
               <div>
-                <h3 className="font-serif text-xl text-white">Silada</h3>
+                <h3 className="font-serif text-xl text-white">Siladan</h3>
                 <p className="text-[10px] text-gold/60 tracking-[0.3em] uppercase -mt-1">
                   Hotel & Resort
                 </p>
@@ -76,7 +76,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <FaEnvelope className="text-gold flex-shrink-0" />
-                <span className="text-gray-400 text-sm">info@silada-hotel.com</span>
+                <span className="text-gray-400 text-sm">info@siladan-hotel.com</span>
               </li>
             </ul>
           </div>
@@ -104,7 +104,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="mt-16 pt-8 border-t border-gold/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-sm">
-            © 2026 Silada Hotel & Resort. All rights reserved.
+            © 2026 Siladan Hotel & Resort. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <a href="#" className="text-gray-500 hover:text-gold text-xs transition-colors">

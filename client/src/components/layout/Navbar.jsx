@@ -51,7 +51,7 @@ const Navbar = () => {
             </div>
             <div className="hidden sm:block">
               <h1 className="font-serif text-xl text-white group-hover:text-gold transition-colors">
-                Silada
+                Siladan
               </h1>
               <p className="text-[10px] text-gold/60 tracking-[0.3em] uppercase -mt-1">
                 Hotel & Resort

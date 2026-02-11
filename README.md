@@ -1,4 +1,4 @@
-# 🏨 Silada Hotel Booking System
+# 🏨 Siladan Hotel Booking System
 
 **JADE SILADAN — BSCS-3**
 
@@ -227,7 +227,7 @@ Navigate to: **http://localhost:5173**
 
 | Role  | Email              | Password  |
 |-------|--------------------|-----------|
-| Admin | admin@silada.com   | admin123  |
+| Admin | admin@siladan.com  | admin123  |
 | User  | john@example.com   | user123   |
 
 ---

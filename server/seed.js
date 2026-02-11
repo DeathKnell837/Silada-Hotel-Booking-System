@@ -132,7 +132,7 @@ const rooms = [
     name: 'The Imperial Presidential',
     type: 'Presidential',
     description:
-      'The crown jewel of Silada — a palatial presidential suite spanning the entire top floor. Two master bedrooms, private chef kitchen, grand piano, personal cinema, rooftop infinity pool, and 360° panoramic views.',
+      'The crown jewel of Siladan — a palatial presidential suite spanning the entire top floor. Two master bedrooms, private chef kitchen, grand piano, personal cinema, rooftop infinity pool, and 360° panoramic views.',
     price: 1200,
     capacity: 6,
     size: 2000,
@@ -180,8 +180,8 @@ const rooms = [
 
 const users = [
   {
-    name: 'Admin Silada',
-    email: 'admin@silada.com',
+    name: 'Admin Siladan',
+    email: 'admin@siladan.com',
     password: 'admin123',
     phone: '+1 555-0100',
     role: 'admin',
@@ -232,7 +232,7 @@ export const seedDatabase = async () => {
     }
 
     console.log('🌱 Database seeded successfully!');
-    console.log('   👤 Admin: admin@silada.com / admin123');
+    console.log('   👤 Admin: admin@siladan.com / admin123');
     console.log('   👤 User:  john@example.com / user123');
   } catch (error) {
     console.error('❌ Seeding error:', error.message);

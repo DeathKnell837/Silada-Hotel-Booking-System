@@ -36,8 +36,8 @@ const Home = () => {
 
   const testimonials = [
     { name: 'Victoria R.', role: 'Travel Blogger', text: 'An absolutely breathtaking experience. The Presidential Suite was beyond anything I\'ve ever experienced. Pure luxury in every detail.', rating: 5 },
-    { name: 'James M.', role: 'Business Executive', text: 'Silada exceeds every expectation. The staff anticipates your every need. This has become our family\'s annual retreat destination.', rating: 5 },
-    { name: 'Sophie L.', role: 'Honeymooner', text: 'We chose Silada for our honeymoon and it was magical. The private terrace suite with ocean views made it unforgettable.', rating: 5 },
+    { name: 'James M.', role: 'Business Executive', text: 'Siladan exceeds every expectation. The staff anticipates your every need. This has become our family\'s annual retreat destination.', rating: 5 },
+    { name: 'Sophie L.', role: 'Honeymooner', text: 'We chose Siladan for our honeymoon and it was magical. The private terrace suite with ocean views made it unforgettable.', rating: 5 },
   ];
 
   return (
@@ -64,7 +64,7 @@ const Home = () => {
             variants={fadeInUp}
             className="text-gold tracking-[0.4em] uppercase text-sm mb-6"
           >
-            Welcome to Silada
+            Welcome to Siladan
           </motion.p>
           <motion.h1
             variants={fadeInUp}

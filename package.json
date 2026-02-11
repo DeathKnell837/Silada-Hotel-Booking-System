@@ -1,7 +1,7 @@
 {
   "name": "silada-hotel-booking-system",
   "version": "1.0.0",
-  "description": "Silada Hotel Booking System - Luxury Hotel Management",
+  "description": "Siladan Hotel Booking System - Luxury Hotel Management",
   "scripts": {
     "install:server": "cd server && npm install",
     "install:client": "cd client && npm install",

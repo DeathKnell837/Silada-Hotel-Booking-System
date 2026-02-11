@@ -28,7 +28,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 // API Routes
 app.get('/api', (req, res) => {
-  res.json({ message: '🏨 Silada Hotel Booking System API is running' });
+  res.json({ message: '🏨 Siladan Hotel Booking System API is running' });
 });
 
 app.use('/api/auth', authRoutes);

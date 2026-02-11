@@ -50,7 +50,7 @@ const Login = () => {
               <span className="font-serif text-gold text-3xl font-bold">S</span>
             </div>
             <h1 className="font-serif text-3xl text-white mb-2">Welcome Back</h1>
-            <p className="text-gray-400 text-sm">Sign in to your Silada account</p>
+            <p className="text-gray-400 text-sm">Sign in to your Siladan account</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -105,7 +105,7 @@ const Login = () => {
             <p className="text-gray-500 text-xs text-center mb-3">Quick Login (Demo)</p>
             <div className="flex gap-3">
               <button
-                onClick={() => { setEmail('admin@silada.com'); setPassword('admin123'); }}
+                onClick={() => { setEmail('admin@siladan.com'); setPassword('admin123'); }}
                 className="flex-1 text-xs py-2 px-3 rounded-lg border border-gold/20 text-gold/70 hover:bg-gold/10 transition-colors"
               >
                 Admin
