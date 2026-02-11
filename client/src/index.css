@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1A1A2E;
+}
+::-webkit-scrollbar-thumb {
+  background: #C9A96E;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E0C994;
+}
+
+/* Custom selection color */
+::selection {
+  background: rgba(201, 169, 110, 0.3);
+  color: #F5F5F5;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Base styles */
+body {
+  overflow-x: hidden;
+}
+
+/* Gold underline effect */
+.gold-underline {
+  position: relative;
+  display: inline-block;
+}
+.gold-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #C9A96E, transparent);
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(42, 42, 74, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 169, 110, 0.15);
+}
+
+/* Gold border animation */
+.gold-border-glow {
+  box-shadow: 0 0 15px rgba(201, 169, 110, 0.1),
+              inset 0 0 15px rgba(201, 169, 110, 0.05);
+}
+
+/* Swiper custom */
+.swiper-pagination-bullet {
+  background: #C9A96E !important;
+  opacity: 0.5 !important;
+}
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+}
+.swiper-button-prev,
+.swiper-button-next {
+  color: #C9A96E !important;
+}
+
+/* Date picker custom styles */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) sepia(1) saturate(2) hue-rotate(10deg);
+  cursor: pointer;
+}
+
+@layer components {
+  .btn-gold {
+    @apply bg-gold text-dark font-semibold px-6 py-3 rounded-lg 
+           hover:bg-gold-light transition-all duration-300 
+           shadow-lg hover:shadow-gold/20;
+  }
+  .btn-outline-gold {
+    @apply border border-gold text-gold px-6 py-3 rounded-lg 
+           hover:bg-gold hover:text-dark transition-all duration-300;
+  }
+  .input-dark {
+    @apply w-full bg-dark-light border border-dark-lighter rounded-lg px-4 py-3 
+           text-gray-200 placeholder-gray-500 focus:border-gold focus:outline-none 
+           focus:ring-1 focus:ring-gold/50 transition-all duration-300;
+  }
+}

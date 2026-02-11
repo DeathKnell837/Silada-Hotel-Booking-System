@@ -1,0 +1,22 @@
+{
+  "name": "silada-hotel-booking-system",
+  "version": "1.0.0",
+  "description": "Silada Hotel Booking System - Luxury Hotel Management",
+  "scripts": {
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
+    "install:all": "npm run install:server && npm run install:client",
+    "postinstall": "npm run install:all",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev": "concurrently --names SERVER,CLIENT --prefix-colors blue,green \"npm run dev:server\" \"npm run dev:client\"",
+    "start": "concurrently --names SERVER,CLIENT \"npm start --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix client"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": ["hotel", "booking", "mern", "react", "nodejs"],
+  "author": "DeathKnell837",
+  "license": "MIT"
+}
