@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: silada-hotel-booking-system
+    runtime: node
+    plan: free
+    buildCommand: npm run render:build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        value: silada_hotel_super_secret_key_2026_luxury_booking_system

@@ -5,11 +5,19 @@ let mongoServer;
 
 const connectDB = async () => {
   try {
-    mongoServer = await MongoMemoryServer.create();
-    const uri = mongoServer.getUri();
-    
-    await mongoose.connect(uri);
-    console.log(`✅ MongoDB Memory Server connected: ${uri}`);
+    let uri;
+
+    // Use real MongoDB if MONGODB_URI is provided (production), otherwise use Memory Server
+    if (process.env.MONGODB_URI) {
+      uri = process.env.MONGODB_URI;
+      await mongoose.connect(uri);
+      console.log(`✅ MongoDB connected: ${uri.replace(/\/\/.*@/, '//<credentials>@')}`);
+    } else {
+      mongoServer = await MongoMemoryServer.create();
+      uri = mongoServer.getUri();
+      await mongoose.connect(uri);
+      console.log(`✅ MongoDB Memory Server connected: ${uri}`);
+    }
     
     // Auto-seed on first connection
     const { seedDatabase } = await import('../seed.js');
