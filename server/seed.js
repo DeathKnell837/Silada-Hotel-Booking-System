@@ -115,7 +115,7 @@ const rooms = [
     size: 700,
     bedType: 'King',
     images: [
-      'https://images.unsplash.com/photo-1609949093091-5b39e3ef79c2?w=800',
+      'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800',
       'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800',
       'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800',
     ],
