@@ -12,7 +12,7 @@
     "dev": "concurrently --names SERVER,CLIENT --prefix-colors blue,green \"npm run dev:server\" \"npm run dev:client\"",
     "build": "npm run build --prefix client",
     "start": "node server/server.js",
-    "render:build": "npm install && npm run build"
+    "render:build": "npm install --include=dev --prefix client && npm install --prefix server && npm run build"
   },
   "dependencies": {
     "concurrently": "^8.2.2"
