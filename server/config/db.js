@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 
 let mongoServer;
 
@@ -13,6 +12,8 @@ const connectDB = async () => {
       await mongoose.connect(uri);
       console.log(`✅ MongoDB connected: ${uri.replace(/\/\/.*@/, '//<credentials>@')}`);
     } else {
+      // Only import MongoMemoryServer when needed (local development)
+      const { MongoMemoryServer } = await import('mongodb-memory-server');
       mongoServer = await MongoMemoryServer.create();
       uri = mongoServer.getUri();
       await mongoose.connect(uri);
