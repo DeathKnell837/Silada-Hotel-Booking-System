@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  FaCalendarCheck, FaDollarSign, FaBed, FaUsers,
+  FaCalendarCheck, FaMoneyBillWave, FaBed, FaUsers,
   FaChartLine, FaArrowUp, FaArrowDown, FaHotel,
 } from 'react-icons/fa';
 import { bookingService, roomService, userService } from '../../services/dataService';
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
       color: 'from-blue-500/20 to-blue-600/10', iconColor: 'text-blue-400',
     },
     {
-      icon: FaDollarSign, label: 'Revenue', value: formatCurrency(stats.revenue),
+      icon: FaMoneyBillWave, label: 'Revenue', value: formatCurrency(stats.revenue),
       color: 'from-green-500/20 to-green-600/10', iconColor: 'text-green-400',
     },
     {

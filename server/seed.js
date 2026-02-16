@@ -7,7 +7,7 @@ const rooms = [
     type: 'Standard',
     description:
       'A comfortable standard room with breathtaking ocean views. Designed with modern elegance, featuring premium linens and a private balcony perfect for watching the sunset.',
-    price: 150,
+    price: 8500,
     capacity: 2,
     size: 320,
     bedType: 'Queen',
@@ -27,7 +27,7 @@ const rooms = [
     type: 'Standard',
     description:
       'A serene standard room overlooking our lush tropical gardens. Features contemporary decor with natural materials and warm lighting for a peaceful retreat.',
-    price: 120,
+    price: 6500,
     capacity: 2,
     size: 300,
     bedType: 'Queen',
@@ -47,7 +47,7 @@ const rooms = [
     type: 'Deluxe',
     description:
       'An exquisite deluxe room adorned with sapphire accents and premium furnishings. Spacious layout with a separate seating area, walk-in rain shower, and panoramic city views.',
-    price: 280,
+    price: 15500,
     capacity: 2,
     size: 450,
     bedType: 'King',
@@ -67,7 +67,7 @@ const rooms = [
     type: 'Deluxe',
     description:
       'Wrapped in golden warmth, this deluxe room offers unparalleled luxury with handcrafted furniture, Italian marble bathroom, and floor-to-ceiling windows showcasing the coastline.',
-    price: 320,
+    price: 18000,
     capacity: 3,
     size: 500,
     bedType: 'King',
@@ -87,7 +87,7 @@ const rooms = [
     type: 'Suite',
     description:
       'A magnificent suite inspired by royal heritage, featuring a grand living room, dining area, master bedroom with canopy bed, and a private terrace with infinity pool views.',
-    price: 550,
+    price: 30000,
     capacity: 4,
     size: 800,
     bedType: 'King',
@@ -110,7 +110,7 @@ const rooms = [
     type: 'Suite',
     description:
       'An enchanting suite bathed in soft ambient lighting with a contemporary design. Features separate living quarters, premium entertainment system, and a luxurious soaking tub.',
-    price: 480,
+    price: 27000,
     capacity: 3,
     size: 700,
     bedType: 'King',
@@ -133,7 +133,7 @@ const rooms = [
     type: 'Presidential',
     description:
       'The crown jewel of Siladan — a palatial presidential suite spanning the entire top floor. Two master bedrooms, private chef kitchen, grand piano, personal cinema, rooftop infinity pool, and 360° panoramic views.',
-    price: 1200,
+    price: 65000,
     capacity: 6,
     size: 2000,
     bedType: 'King',
@@ -157,7 +157,7 @@ const rooms = [
     type: 'Presidential',
     description:
       'An exclusive beachfront villa with private garden, outdoor dining pavilion, personal infinity pool, and direct beach access. Three luxurious bedrooms with en-suite bathrooms, a fully equipped gourmet kitchen, and 24/7 butler service.',
-    price: 950,
+    price: 52000,
     capacity: 6,
     size: 1800,
     bedType: 'King',

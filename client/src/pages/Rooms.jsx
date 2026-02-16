@@ -112,7 +112,7 @@ const Rooms = () => {
 
             <input
               type="number"
-              placeholder="Min $"
+              placeholder="Min ₱"
               value={filters.minPrice}
               onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
               className="input-dark"
@@ -120,7 +120,7 @@ const Rooms = () => {
 
             <input
               type="number"
-              placeholder="Max $"
+              placeholder="Max ₱"
               value={filters.maxPrice}
               onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
               className="input-dark"
