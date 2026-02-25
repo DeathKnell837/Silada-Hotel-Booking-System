@@ -13,6 +13,8 @@ A luxury hotel booking web application built with the MERN stack (MongoDB, Expre
 
 The Hotel Booking System is a comprehensive digital platform designed to streamline the process of reserving hotel accommodations. This system serves as a bridge between customers seeking lodging and hotels offering their rooms, automating what was traditionally a manual, time-consuming process.
 
+LINK: https://silada-hotel.onrender.com
+
 ### Core Purpose
 
 The system enables customers to search for available rooms, view room details and pricing, make reservations for specific dates, and manage their bookings — all through an intuitive digital interface. For hotel administrators, it provides tools to manage room inventory, track occupancy, process payments, and maintain customer records efficiently.
