@@ -6,6 +6,8 @@ A luxury hotel booking web application built with the MERN stack (MongoDB, Expre
 
 ![License](https://img.shields.io/badge/license-MIT-gold)
 ![Node](https://img.shields.io/badge/node-%3E%3D18-green)
+![Stack](https://img.shields.io/badge/stack-MERN-blue)
+![Platform](https://img.shields.io/badge/deployed-Render-purple)
 
 ---
 
@@ -186,11 +188,13 @@ The following illustrates the complete journey of a hotel room booking from init
 
 ## ✨ Features
 
-- 🛏️ **Room Browsing & Booking** — Browse rooms by type, price, and capacity with real-time availability checking
+- 🛏️ **Room Browsing & Booking** — Browse rooms by type (Standard, Deluxe, Suite, Presidential), price, and capacity with real-time availability
 - 🔐 **User Authentication** — Secure JWT-based registration/login with bcrypt password hashing
-- 👤 **User Profiles** — View booking history, manage profile, cancel bookings
+- 👤 **User Profiles** — View booking history, manage profile, cancel pending bookings
 - 🛡️ **Admin Dashboard** — Manage rooms, bookings, and users with analytics overview
+- 💰 **Philippine Peso (₱) Pricing** — All rates displayed in PHP
 - 🎨 **Luxury Design** — Elegant dark theme with gold accents, smooth animations, fully responsive
+- 🗄️ **Zero-Config Database** — Uses MongoDB Memory Server; no external database setup needed
 
 ---
 
@@ -227,10 +231,16 @@ Navigate to: **http://localhost:5173**
 
 ## 🔑 Default Accounts
 
-| Role  | Email              | Password  |
-|-------|--------------------|-----------|
-| Admin | admin@siladan.com  | admin123  |
-| User  | john@example.com   | user123   |
+The database is automatically seeded with the following accounts on first run:
+
+| Role  | Name          | Email              | Password  |
+|-------|---------------|--------------------|-----------|
+| Admin | Admin Siladan | admin@siladan.com  | admin123  |
+| User  | John Doe      | john@example.com   | user123   |
+| User  | Jane Smith    | jane@example.com   | user123   |
+
+> **Admin** has full access to the Admin Dashboard (manage rooms, bookings, and users).  
+> **Users** can browse rooms, make bookings, and manage their own profile and reservations.
 
 ---
 
@@ -239,34 +249,39 @@ Navigate to: **http://localhost:5173**
 ```
 ├── client/                 # React Frontend (Vite + Tailwind CSS)
 │   ├── src/
-│   │   ├── components/     # Reusable UI components
+│   │   ├── components/     # Reusable UI components (Navbar, Footer, etc.)
 │   │   ├── context/        # Auth context provider
-│   │   ├── pages/          # Page components
-│   │   ├── services/       # API service functions
+│   │   ├── pages/          # Page components (Home, Rooms, Booking, Admin, ...)
+│   │   ├── services/       # API & data service functions
+│   │   ├── utils/          # Helper utilities
 │   │   └── App.jsx         # Main app with routes
 │   └── package.json
 ├── server/                 # Node.js/Express Backend
 │   ├── config/             # Database configuration
-│   ├── controllers/        # Route handlers
-│   ├── middleware/          # Auth & error middleware
-│   ├── models/             # Mongoose schemas
-│   ├── routes/             # API routes
-│   ├── seed.js             # Database seeder
-│   └── package.json
-└── package.json            # Root scripts (concurrently)
+│   ├── controllers/        # Route handler logic
+│   ├── middleware/         # Auth & error middleware
+│   ├── models/             # Mongoose schemas (User, Room, Booking)
+│   ├── routes/             # API route definitions
+│   ├── utils/              # Token generation helpers
+│   ├── seed.js             # Database seeder (auto-runs on start)
+│   └── server.js           # Express app entry point
+├── render.yaml             # Render deployment config
+└── package.json            # Root scripts (dev, build, start)
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer    | Technology                          |
-|----------|-------------------------------------|
-| Frontend | React 18, Vite, Tailwind CSS        |
-| Backend  | Node.js, Express.js                 |
-| Database | MongoDB Memory Server (standalone)  |
-| Auth     | JWT, bcryptjs                       |
-| UI       | Framer Motion, React Icons, Swiper  |
+| Layer      | Technology                                      |
+|------------|-------------------------------------------------|
+| Frontend   | React 18, Vite, Tailwind CSS                    |
+| Backend    | Node.js 18+, Express.js                         |
+| Database   | MongoDB Memory Server (in-memory, no setup)     |
+| Auth       | JWT (JSON Web Tokens), bcryptjs                 |
+| UI / UX    | Framer Motion, React Icons, Swiper              |
+| Hosting    | Render (free tier)                              |
+| Currency   | Philippine Peso (PHP ₱)                         |
 
 ---
 
