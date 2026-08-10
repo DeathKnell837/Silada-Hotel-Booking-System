@@ -10,9 +10,13 @@ import authRoutes from './routes/authRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import chatbotRoutes from './routes/chatbotRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
+import recommendationRoutes from './routes/recommendationRoutes.js';
+import pricingRoutes from './routes/pricingRoutes.js';
+import anomalyRoutes from './routes/anomalyRoutes.js';
 
 dotenv.config();
-// Also try loading from server/.env when running from project root
 dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), '.env') });
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,19 +34,23 @@ if (process.env.NODE_ENV !== 'production') {
 
 // API Routes
 app.get('/api', (req, res) => {
-  res.json({ message: '🏨 Siladan Hotel Booking System API is running' });
+  res.json({ message: '🏨 Silada Smart Hotel Booking System API (AI Integrated) is running' });
 });
 
 app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/chatbot', chatbotRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/pricing', pricingRoutes);
+app.use('/api/anomalies', anomalyRoutes);
 
 // Serve React frontend in production
 const clientDistPath = path.join(__dirname, '..', 'client', 'dist');
 app.use(express.static(clientDistPath));
 app.get('*', (req, res, next) => {
-  // Only serve index.html for non-API routes
   if (req.path.startsWith('/api')) {
     return next();
   }
@@ -57,8 +65,8 @@ app.use(errorHandler);
 const startServer = async () => {
   await connectDB();
   app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📡 API available at http://localhost:${PORT}/api`);
+    console.log(`🚀 Silada Smart Hotel Server running on http://localhost:${PORT}`);
+    console.log(`🤖 AI API routes enabled: Chatbot, Reviews, Recommendations, Pricing, Anomalies`);
   });
 };
 

@@ -9,6 +9,8 @@ import 'swiper/css/pagination';
 import { roomService } from '../services/dataService';
 import { formatCurrency } from '../utils/helpers';
 
+import RecommendationSection from '../components/RecommendationSection';
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -102,6 +104,9 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* ===== AI ROOM RECOMMENDATIONS ===== */}
+      <RecommendationSection />
 
       {/* ===== FEATURED ROOMS ===== */}
       <section className="py-24 px-4">

@@ -1,5 +1,8 @@
 import User from './models/User.js';
 import Room from './models/Room.js';
+import Review from './models/Review.js';
+import Booking from './models/Booking.js';
+import PricingConfig from './models/PricingConfig.js';
 
 const rooms = [
   {
@@ -152,30 +155,6 @@ const rooms = [
     isFeatured: true,
     isAvailable: true,
   },
-  {
-    name: 'Emerald Presidential Villa',
-    type: 'Presidential',
-    description:
-      'An exclusive beachfront villa with private garden, outdoor dining pavilion, personal infinity pool, and direct beach access. Three luxurious bedrooms with en-suite bathrooms, a fully equipped gourmet kitchen, and 24/7 butler service.',
-    price: 52000,
-    capacity: 6,
-    size: 1800,
-    bedType: 'King',
-    images: [
-      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800',
-      'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800',
-      'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800',
-    ],
-    amenities: [
-      'WiFi', 'Air Conditioning', 'Beach Access', 'Private Pool', 'Room Service',
-      'Butler Service', 'Gourmet Kitchen', 'Garden', 'Outdoor Dining',
-      'Spa Treatment Room', 'Limousine Service',
-    ],
-    rating: 4.9,
-    numReviews: 18,
-    isFeatured: true,
-    isAvailable: true,
-  },
 ];
 
 const users = [
@@ -202,39 +181,146 @@ const users = [
   },
 ];
 
+const pricingConfigs = [
+  { roomType: 'Standard', baseMultiplier: 1.0, weekendMultiplier: 1.15, peakSeasonMultiplier: 1.25, highDemandMultiplier: 1.3, isAutoPricingEnabled: true },
+  { roomType: 'Deluxe', baseMultiplier: 1.0, weekendMultiplier: 1.2, peakSeasonMultiplier: 1.3, highDemandMultiplier: 1.35, isAutoPricingEnabled: true },
+  { roomType: 'Suite', baseMultiplier: 1.05, weekendMultiplier: 1.25, peakSeasonMultiplier: 1.35, highDemandMultiplier: 1.4, isAutoPricingEnabled: true },
+  { roomType: 'Presidential', baseMultiplier: 1.1, weekendMultiplier: 1.3, peakSeasonMultiplier: 1.4, highDemandMultiplier: 1.5, isAutoPricingEnabled: true },
+];
+
 export const seedDatabase = async () => {
   try {
-    // Force reseed: clear and reseed to apply latest data
     const userCount = await User.countDocuments();
     const roomCount = await Room.countDocuments();
 
     if (userCount > 0 && roomCount > 0) {
-      // Check if rooms need updating (e.g. fixed images)
-      await Room.deleteMany({});
-      await Room.create(rooms);
-      console.log('🔄 Rooms refreshed with latest data');
-
-      // Only skip user re-seed if users exist
-      console.log('📦 Users already exist, skipping user seed...');
+      console.log('📦 Database already seeded, initializing AI pricing configs & sample reviews...');
+      await seedPricingConfigs();
+      await seedSampleReviews();
       return;
     }
 
-    console.log('🌱 Seeding database...');
+    console.log('🌱 Seeding Silada Smart Hotel database...');
 
-    if (userCount === 0) {
-      await User.create(users);
-      console.log('   ✅ Users created');
-    }
+    const createdUsers = await User.create(users);
+    console.log('   ✅ Users created');
 
-    if (roomCount === 0) {
-      await Room.create(rooms);
-      console.log('   ✅ Rooms created');
-    }
+    const createdRooms = await Room.create(rooms);
+    console.log('   ✅ Rooms created');
 
-    console.log('🌱 Database seeded successfully!');
+    await seedPricingConfigs();
+    console.log('   🤖 Pricing Configs created');
+
+    await seedSampleReviews(createdUsers, createdRooms);
+    console.log('   💬 AI Sentiment Sample Reviews created');
+
+    await seedSampleBookings(createdUsers, createdRooms);
+    console.log('   📅 Sample Bookings created');
+
+    console.log('🌱 Database seeded successfully with AI features!');
     console.log('   👤 Admin: admin@siladan.com / admin123');
     console.log('   👤 User:  john@example.com / user123');
   } catch (error) {
     console.error('❌ Seeding error:', error.message);
+  }
+};
+
+const seedPricingConfigs = async () => {
+  for (const cfg of pricingConfigs) {
+    await PricingConfig.findOneAndUpdate(
+      { roomType: cfg.roomType },
+      cfg,
+      { upsert: true, new: true }
+    );
+  }
+};
+
+const seedSampleReviews = async (existingUsers = [], existingRooms = []) => {
+  try {
+    const reviewCount = await Review.countDocuments();
+    if (reviewCount > 0) return;
+
+    const uList = existingUsers.length ? existingUsers : await User.find({ role: 'user' });
+    const rList = existingRooms.length ? existingRooms : await Room.find();
+
+    if (!uList.length || !rList.length) return;
+
+    const sampleReviews = [
+      {
+        user: uList[0]._id,
+        room: rList[2]._id, // Sapphire Deluxe
+        rating: 5,
+        comment: 'Absolutely breathtaking stay! The room cleanliness was impeccable and the ocean view from the terrace was unmatchable. Exceptional room service!',
+        sentimentScore: 0.95,
+        sentimentCategory: 'Positive',
+        topics: ['Cleanliness', 'View', 'Room Service'],
+        suggestions: [],
+      },
+      {
+        user: uList[1]._id,
+        room: rList[4]._id, // Royal Heritage Suite
+        rating: 5,
+        comment: 'The butler service was top-tier and the infinity pool access was so luxurious. Worth every single peso for a family weekend retreat.',
+        sentimentScore: 0.9,
+        sentimentCategory: 'Positive',
+        topics: ['Service', 'Amenities', 'Value/Price'],
+        suggestions: [],
+      },
+      {
+        user: uList[0]._id,
+        room: rList[0]._id, // Ocean View Standard
+        rating: 3,
+        comment: 'The room view was nice, but the WiFi connection was quite spotty in the evening and the mini bar selection was very limited.',
+        sentimentScore: -0.2,
+        sentimentCategory: 'Neutral',
+        topics: ['WiFi', 'Amenities', 'View'],
+        suggestions: ['Upgrade high-speed WiFi router coverage', 'Expand mini bar refreshment options'],
+      },
+    ];
+
+    await Review.create(sampleReviews);
+    console.log('   ✅ Initial AI Reviews Seeded');
+  } catch (err) {
+    console.error('Review seed error:', err.message);
+  }
+};
+
+const seedSampleBookings = async (existingUsers = [], existingRooms = []) => {
+  try {
+    const bookingCount = await Booking.countDocuments();
+    if (bookingCount > 0) return;
+
+    const uList = existingUsers.length ? existingUsers : await User.find({ role: 'user' });
+    const rList = existingRooms.length ? existingRooms : await Room.find();
+
+    if (!uList.length || !rList.length) return;
+
+    const now = new Date();
+    const sampleBookings = [
+      {
+        user: uList[0]._id,
+        room: rList[2]._id, // Sapphire Deluxe
+        checkIn: new Date(now.getTime() - 10 * 86400000),
+        checkOut: new Date(now.getTime() - 7 * 86400000),
+        guests: 2,
+        totalPrice: 46500,
+        status: 'completed',
+        specialRequests: 'Anniversary setup',
+      },
+      {
+        user: uList[0]._id,
+        room: rList[3]._id, // Golden Deluxe Suite
+        checkIn: new Date(now.getTime() + 3 * 86400000),
+        checkOut: new Date(now.getTime() + 6 * 86400000),
+        guests: 2,
+        totalPrice: 54000,
+        status: 'confirmed',
+        specialRequests: 'Late check-in',
+      },
+    ];
+
+    await Booking.create(sampleBookings);
+  } catch (err) {
+    console.error('Booking seed error:', err.message);
   }
 };

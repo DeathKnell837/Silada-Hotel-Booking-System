@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
-import { FaUser, FaCrown, FaSignOutAlt, FaHotel } from 'react-icons/fa';
+import { FaUser, FaCrown, FaSignOutAlt, FaRobot } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
@@ -93,9 +93,9 @@ const Navbar = () => {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="absolute right-0 mt-3 w-56 glass-card rounded-xl shadow-2xl overflow-hidden"
+                      className="absolute right-0 mt-3 w-60 glass-card rounded-xl shadow-2xl overflow-hidden bg-neutral-900 border border-neutral-800"
                     >
-                      <div className="px-4 py-3 border-b border-gold/10">
+                      <div className="px-4 py-3 border-b border-neutral-800">
                         <p className="text-sm font-medium text-white">{user.name}</p>
                         <p className="text-xs text-gray-400">{user.email}</p>
                       </div>
@@ -104,16 +104,28 @@ const Navbar = () => {
                           to="/profile"
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-gold hover:bg-gold/5 transition-all"
                         >
-                          <FaUser className="text-xs" /> My Profile
+                          <FaUser className="text-xs text-gold" /> My Profile
                         </Link>
+
                         {isAdmin && (
-                          <Link
-                            to="/admin"
-                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-gold hover:bg-gold/5 transition-all"
-                          >
-                            <FaCrown className="text-xs" /> Admin Dashboard
-                          </Link>
+                          <>
+                            <div className="my-1 border-t border-neutral-800" />
+                            <Link
+                              to="/admin"
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-gold hover:bg-gold/5 transition-all"
+                            >
+                              <FaCrown className="text-xs text-amber-400" /> Admin Overview
+                            </Link>
+                            <Link
+                              to="/admin/ai"
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-amber-400 font-semibold hover:bg-amber-500/10 transition-all"
+                            >
+                              <FaRobot className="text-xs text-amber-400" /> AI Control Hub
+                            </Link>
+                          </>
                         )}
+
+                        <div className="my-1 border-t border-neutral-800" />
                         <button
                           onClick={handleLogout}
                           className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-all"
@@ -178,9 +190,14 @@ const Navbar = () => {
                       <FaUser className="inline mr-2 text-gold" /> My Profile
                     </Link>
                     {isAdmin && (
-                      <Link to="/admin" className="block py-2 text-gray-300 text-sm">
-                        <FaCrown className="inline mr-2 text-gold" /> Admin Dashboard
-                      </Link>
+                      <>
+                        <Link to="/admin" className="block py-2 text-gray-300 text-sm">
+                          <FaCrown className="inline mr-2 text-gold" /> Admin Dashboard
+                        </Link>
+                        <Link to="/admin/ai" className="block py-2 text-amber-400 font-bold text-sm">
+                          <FaRobot className="inline mr-2 text-amber-400" /> AI Control Hub
+                        </Link>
+                      </>
                     )}
                     <button
                       onClick={handleLogout}

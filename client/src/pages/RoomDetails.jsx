@@ -12,10 +12,12 @@ import {
   FaCocktail, FaConciergeBell, FaSwimmingPool, FaSpa, FaTv, FaShieldAlt,
   FaUtensils, FaCar, FaArrowRight, FaArrowLeft, FaCheckCircle,
 } from 'react-icons/fa';
-import { roomService } from '../services/dataService';
+import { roomService, reviewService } from '../services/dataService';
 import { formatCurrency, getRoomTypeColor } from '../utils/helpers';
 import { useAuth } from '../context/AuthContext';
 import Spinner from '../components/common/Spinner';
+import ReviewForm from '../components/ReviewForm';
+import ReviewList from '../components/ReviewList';
 
 const amenityIcons = {
   WiFi: FaWifi, 'Air Conditioning': FaSnowflake, 'Mini Bar': FaCocktail,
@@ -32,13 +34,20 @@ const RoomDetails = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [room, setRoom] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [selectedImg, setSelectedImg] = useState(0);
 
   useEffect(() => {
-    roomService.getById(id)
-      .then(({ data }) => setRoom(data))
+    Promise.all([
+      roomService.getById(id),
+      reviewService.getByRoom(id).catch(() => ({ data: [] })),
+    ])
+      .then(([roomRes, reviewRes]) => {
+        setRoom(roomRes.data);
+        setReviews(reviewRes.data || []);
+      })
       .catch(() => navigate('/rooms'))
       .finally(() => setLoading(false));
   }, [id]);
@@ -155,7 +164,7 @@ const RoomDetails = () => {
             </div>
 
             {/* Amenities */}
-            <div className="glass-card rounded-2xl p-8">
+            <div className="glass-card rounded-2xl p-8 mb-8">
               <h3 className="font-serif text-xl text-white mb-6">Amenities</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {room.amenities?.map((a, i) => {
@@ -168,6 +177,26 @@ const RoomDetails = () => {
                   );
                 })}
               </div>
+            </div>
+
+            {/* AI Reviews & Sentiment Section */}
+            <div className="glass-card rounded-2xl p-8">
+              <h3 className="font-serif text-2xl text-white mb-6">Guest Reviews & AI Sentiment</h3>
+              {user ? (
+                <ReviewForm
+                  roomId={room._id}
+                  onReviewAdded={(newRev) => setReviews((prev) => [newRev, ...prev])}
+                />
+              ) : (
+                <div className="bg-neutral-900/60 border border-neutral-800 rounded-xl p-4 text-center text-sm text-neutral-400 mb-6">
+                  Please{' '}
+                  <Link to="/login" className="text-amber-400 font-semibold underline">
+                    sign in
+                  </Link>{' '}
+                  to post a review.
+                </div>
+              )}
+              <ReviewList reviews={reviews} />
             </div>
           </div>
 

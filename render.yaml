@@ -10,3 +10,5 @@ services:
         value: production
       - key: JWT_SECRET
         value: silada_hotel_super_secret_key_2026_luxury_booking_system
+      - key: GROQ_API_KEY
+        sync: false

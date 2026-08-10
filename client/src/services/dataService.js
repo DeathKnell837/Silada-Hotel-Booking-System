@@ -23,3 +23,35 @@ export const userService = {
   getById: (id) => api.get(`/users/${id}`),
   delete: (id) => api.delete(`/users/${id}`),
 };
+
+// AI Services
+export const chatbotService = {
+  sendMessage: (sessionId, message) => api.post('/chatbot/message', { sessionId, message }),
+  getHistory: (sessionId) => api.get(`/chatbot/history/${sessionId}`),
+  clearHistory: (sessionId) => api.delete(`/chatbot/history/${sessionId}`),
+};
+
+export const reviewService = {
+  create: (data) => api.post('/reviews', data),
+  getByRoom: (roomId) => api.get(`/reviews/room/${roomId}`),
+  getMyReviews: () => api.get('/reviews/my'),
+  delete: (id) => api.delete(`/reviews/${id}`),
+  getInsights: () => api.get('/reviews/insights'),
+};
+
+export const recommendationService = {
+  getRecommendations: () => api.get('/recommendations'),
+};
+
+export const pricingService = {
+  getQuote: (roomId, checkIn, checkOut) =>
+    api.get(`/pricing/quote/${roomId}`, { params: { checkIn, checkOut } }),
+  getForecast: () => api.get('/pricing/forecast'),
+  getConfig: () => api.get('/pricing/config'),
+  updateConfig: (roomType, data) => api.put(`/pricing/config/${roomType}`, data),
+};
+
+export const anomalyService = {
+  getAlerts: () => api.get('/anomalies'),
+  updateStatus: (id, status) => api.put(`/anomalies/${id}`, { status }),
+};

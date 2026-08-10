@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaCalendarAlt, FaUsers, FaPen, FaArrowLeft } from 'react-icons/fa';
+import { FaCalendarAlt, FaUsers, FaPen, FaArrowLeft, FaChartLine, FaRobot } from 'react-icons/fa';
 import toast from 'react-hot-toast';
-import { roomService, bookingService } from '../services/dataService';
+import { roomService, bookingService, pricingService } from '../services/dataService';
 import { formatCurrency, getTodayString, getTomorrowString, calculateNights } from '../utils/helpers';
 import Spinner from '../components/common/Spinner';
 
@@ -13,6 +13,7 @@ const BookingPage = () => {
   const [room, setRoom] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [dynamicPricing, setDynamicPricing] = useState(null);
   const [form, setForm] = useState({
     checkIn: getTodayString(),
     checkOut: getTomorrowString(),
@@ -27,8 +28,18 @@ const BookingPage = () => {
       .finally(() => setLoading(false));
   }, [roomId]);
 
+  // Fetch AI Dynamic Pricing Quote when dates change
+  useEffect(() => {
+    if (roomId && form.checkIn && form.checkOut) {
+      pricingService.getQuote(roomId, form.checkIn, form.checkOut)
+        .then(({ data }) => setDynamicPricing(data))
+        .catch(() => setDynamicPricing(null));
+    }
+  }, [roomId, form.checkIn, form.checkOut]);
+
   const nights = calculateNights(form.checkIn, form.checkOut);
-  const totalPrice = nights > 0 && room ? nights * room.price : 0;
+  const currentPricePerNight = dynamicPricing ? dynamicPricing.calculatedPrice : room?.price || 0;
+  const totalPrice = nights > 0 ? nights * currentPricePerNight : 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +55,13 @@ const BookingPage = () => {
         guests: form.guests,
         specialRequests: form.specialRequests,
       });
-      toast.success('Booking created successfully!');
+
+      if (data.aiFlagged) {
+        toast.error(`Booking under review by AI Security (${data.riskLevel} Risk Flagged)`, { duration: 5000 });
+      } else {
+        toast.success('Booking confirmed!');
+      }
+
       navigate(`/booking/confirmation/${data._id}`);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Booking failed');
@@ -145,12 +162,12 @@ const BookingPage = () => {
                 disabled={submitting || nights <= 0}
                 className="btn-gold w-full !py-4 text-lg disabled:opacity-50"
               >
-                {submitting ? 'Processing...' : `Confirm Booking — ${formatCurrency(totalPrice)}`}
+                {submitting ? 'Processing AI Security Check...' : `Confirm Booking — ${formatCurrency(totalPrice)}`}
               </button>
             </form>
           </motion.div>
 
-          {/* Room Summary */}
+          {/* Room & AI Dynamic Pricing Summary */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -162,14 +179,37 @@ const BookingPage = () => {
                 alt={room.name}
                 className="w-full h-48 object-cover"
               />
-              <div className="p-6">
-                <span className="text-gold text-xs font-semibold tracking-wider uppercase">{room.type}</span>
-                <h3 className="font-serif text-xl text-white mt-1 mb-4">{room.name}</h3>
+              <div className="p-6 space-y-4">
+                <div>
+                  <span className="text-gold text-xs font-semibold tracking-wider uppercase">{room.type}</span>
+                  <h3 className="font-serif text-xl text-white mt-1">{room.name}</h3>
+                </div>
+
+                {/* AI Dynamic Pricing Badge */}
+                {dynamicPricing && (
+                  <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl space-y-1">
+                    <div className="flex items-center justify-between text-xs font-semibold text-amber-400">
+                      <span className="flex items-center gap-1">
+                        <FaRobot /> AI Dynamic Rate
+                      </span>
+                      <span>{dynamicPricing.multiplier}x Multiplier</span>
+                    </div>
+                    {dynamicPricing.factors?.length > 0 && (
+                      <p className="text-[11px] text-neutral-400">
+                        Factor: {dynamicPricing.factors.join(', ')}
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between text-gray-400">
-                    <span>Rate per night</span>
-                    <span className="text-white">{formatCurrency(room.price)}</span>
+                    <span>Base rate per night</span>
+                    <span className="text-gray-400 line-through">{formatCurrency(room.price)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-400 font-semibold">
+                    <span>AI Calculated Nightly Rate</span>
+                    <span className="text-amber-400">{formatCurrency(currentPricePerNight)}</span>
                   </div>
                   <div className="flex justify-between text-gray-400">
                     <span>Number of nights</span>
@@ -181,8 +221,8 @@ const BookingPage = () => {
                   </div>
                   <div className="h-px bg-gold/20 my-2" />
                   <div className="flex justify-between font-semibold">
-                    <span className="text-white">Total</span>
-                    <span className="text-gold font-serif text-xl">
+                    <span className="text-white">Total Amount</span>
+                    <span className="text-gold font-serif text-2xl">
                       {nights > 0 ? formatCurrency(totalPrice) : '-'}
                     </span>
                   </div>

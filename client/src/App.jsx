@@ -16,6 +16,11 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import ManageRooms from './pages/admin/ManageRooms';
 import ManageBookings from './pages/admin/ManageBookings';
 import ManageUsers from './pages/admin/ManageUsers';
+import AdminAIPage from './pages/admin/AdminAIPage';
+import AdminSentiment from './pages/admin/AdminSentiment';
+import AdminPricing from './pages/admin/AdminPricing';
+import AdminAnomalies from './pages/admin/AdminAnomalies';
+import ChatWidget from './components/Chatbot/ChatWidget';
 import NotFound from './pages/NotFound';
 import ScrollToTop from './components/common/ScrollToTop';
 
@@ -99,9 +104,42 @@ function App() {
               </AdminRoute>
             }
           />
+          <Route
+            path="/admin/ai"
+            element={
+              <AdminRoute>
+                <AdminAIPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/ai/sentiment"
+            element={
+              <AdminRoute>
+                <AdminSentiment />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/ai/pricing"
+            element={
+              <AdminRoute>
+                <AdminPricing />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/ai/anomalies"
+            element={
+              <AdminRoute>
+                <AdminAnomalies />
+              </AdminRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
+      <ChatWidget />
       <Footer />
     </div>
   );

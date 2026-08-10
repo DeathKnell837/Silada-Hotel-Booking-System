@@ -1,7 +1,9 @@
 import Booking from '../models/Booking.js';
 import Room from '../models/Room.js';
+import { calculateDynamicPrice } from '../services/pricingService.js';
+import { detectAnomaly, createAnomalyAlert } from '../services/anomalyService.js';
 
-// @desc    Create a new booking
+// @desc    Create a new booking with AI pricing & anomaly checks
 // @route   POST /api/bookings
 // @access  Private
 export const createBooking = async (req, res) => {
@@ -27,11 +29,26 @@ export const createBooking = async (req, res) => {
       return res.status(400).json({ message: 'Room is not available for selected dates' });
     }
 
-    // Calculate total price
-    const nights = Math.ceil(
+    // Calculate nights & AI Dynamic Price
+    const nights = Math.max(1, Math.ceil(
       (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)
-    );
-    const totalPrice = nights * roomDoc.price;
+    ));
+
+    const priceQuote = await calculateDynamicPrice(room, checkIn, checkOut);
+    const nightlyPrice = priceQuote.calculatedPrice;
+    const totalPrice = nights * nightlyPrice;
+
+    // Run AI Anomaly Detection
+    const anomalyCheck = await detectAnomaly({
+      userId: req.user._id,
+      room: roomDoc,
+      totalPrice,
+      nights,
+      guests: Number(guests || 1),
+    });
+
+    // Create booking (if high anomaly risk, set status to pending review)
+    const bookingStatus = anomalyCheck.isAnomaly ? 'pending' : 'confirmed';
 
     const booking = await Booking.create({
       user: req.user._id,
@@ -40,14 +57,25 @@ export const createBooking = async (req, res) => {
       checkOut,
       guests,
       totalPrice,
+      status: bookingStatus,
       specialRequests,
     });
+
+    // Record Anomaly Alert if flagged
+    if (anomalyCheck.isAnomaly) {
+      await createAnomalyAlert(booking._id, req.user._id, anomalyCheck);
+    }
 
     const populatedBooking = await Booking.findById(booking._id)
       .populate('room', 'name type images price')
       .populate('user', 'name email');
 
-    res.status(201).json(populatedBooking);
+    res.status(201).json({
+      ...populatedBooking.toObject(),
+      aiFlagged: anomalyCheck.isAnomaly,
+      riskLevel: anomalyCheck.riskLevel,
+      dynamicPricing: priceQuote,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -80,7 +108,6 @@ export const getBookingById = async (req, res) => {
       return res.status(404).json({ message: 'Booking not found' });
     }
 
-    // Only allow user to see their own bookings or admin
     if (
       booking.user._id.toString() !== req.user._id.toString() &&
       req.user.role !== 'admin'
