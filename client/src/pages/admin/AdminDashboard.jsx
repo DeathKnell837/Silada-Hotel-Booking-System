@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   FaCalendarCheck, FaMoneyBillWave, FaBed, FaUsers,
-  FaChartLine, FaArrowUp, FaArrowDown, FaHotel,
+  FaChartLine, FaRobot, FaSmile, FaShieldAlt,
 } from 'react-icons/fa';
 import { bookingService, roomService, userService } from '../../services/dataService';
 import { formatCurrency, formatDate, getStatusColor } from '../../utils/helpers';
@@ -63,6 +63,10 @@ const AdminDashboard = () => {
   ];
 
   const adminLinks = [
+    { to: '/admin/ai', icon: FaRobot, label: '🤖 AI Control Hub', desc: 'Overview of all AI systems', isAI: true },
+    { to: '/admin/ai/anomalies', icon: FaShieldAlt, label: '🛡️ Payment Anomaly Security', desc: 'Flagged transaction risk alerts', isAI: true },
+    { to: '/admin/ai/sentiment', icon: FaSmile, label: '💬 AI Review Sentiment', desc: 'Guest feedback analytics', isAI: true },
+    { to: '/admin/ai/pricing', icon: FaChartLine, label: '💰 AI Dynamic Pricing', desc: 'Demand & rate multipliers', isAI: true },
     { to: '/admin/rooms', icon: FaBed, label: 'Manage Rooms', desc: 'Add, edit, or remove rooms' },
     { to: '/admin/bookings', icon: FaCalendarCheck, label: 'Manage Bookings', desc: 'View and update booking status' },
     { to: '/admin/users', icon: FaUsers, label: 'Manage Users', desc: 'View and manage user accounts' },
@@ -108,13 +112,25 @@ const AdminDashboard = () => {
                 <Link
                   key={i}
                   to={link.to}
-                  className="glass-card rounded-xl p-4 flex items-center gap-4 hover:border-gold/30 transition-all group block"
+                  className={`glass-card rounded-xl p-4 flex items-center gap-4 transition-all group block ${
+                    link.isAI
+                      ? 'border-amber-500/30 hover:border-amber-400 bg-amber-500/5'
+                      : 'hover:border-gold/30'
+                  }`}
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
-                    <link.icon className="text-gold" />
+                  <div
+                    className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                      link.isAI ? 'bg-amber-500/20 text-amber-400' : 'bg-gold/10 text-gold'
+                    }`}
+                  >
+                    <link.icon />
                   </div>
                   <div>
-                    <p className="text-white font-medium group-hover:text-gold transition-colors">
+                    <p
+                      className={`font-medium group-hover:text-gold transition-colors ${
+                        link.isAI ? 'text-amber-300' : 'text-white'
+                      }`}
+                    >
                       {link.label}
                     </p>
                     <p className="text-gray-500 text-xs">{link.desc}</p>
