@@ -1,39 +1,43 @@
+import mongoose from 'mongoose';
 import Room from '../models/Room.js';
 import { generateAICompletion } from './aiService.js';
 
 export const buildSystemPrompt = async () => {
   let roomDetailsText = '';
   try {
-    const rooms = await Room.find({ isAvailable: true }).select('name type price capacity bedType size amenities rating description');
-    roomDetailsText = rooms.map(r => 
-      `- ${r.name} (${r.type}): ₱${r.price.toLocaleString()}/night, Max ${r.capacity} guests, Bed: ${r.bedType}, Size: ${r.size} sq ft, Rating: ${r.rating}/5 ⭐. Amenities: ${r.amenities.join(', ')}. Description: ${r.description}`
-    ).join('\n');
+    if (mongoose.connection.readyState === 1) {
+      const rooms = await Room.find({ isAvailable: true }).select('name type price capacity rating');
+      if (rooms && rooms.length > 0) {
+        roomDetailsText = rooms
+          .map((r) => `- ${r.name} (${r.type}): ₱${r.price.toLocaleString()}/night, Max ${r.capacity} guests`)
+          .join('\n');
+      }
+    }
   } catch (err) {
     console.error('Error fetching rooms for chatbot prompt:', err);
-    roomDetailsText = 'Rooms currently available: Standard, Deluxe, Suite, Presidential.';
   }
 
-  return `You are "Silada AI", the friendly 24/7 Virtual Concierge for Silada Luxury Hotel & Resort.
+  if (!roomDetailsText) {
+    roomDetailsText = '- Deluxe Room: ₱5,500/night, Max 3 guests\n- Luxury Suite: ₱9,500/night, Max 4 guests\n- Presidential Suite: ₱18,000/night, Max 6 guests';
+  }
 
-Hotel Overview:
-Silada Hotel is a premier 5-star luxury hotel offering world-class hospitality, elegant accommodations, fine dining, spa wellness, and modern booking conveniences.
+  return `You are "Silada AI", the 24/7 Virtual Concierge for Silada Luxury Hotel & Resort.
 
-Current Available Rooms & Live Rates:
+Available Rooms & Live Rates:
 ${roomDetailsText}
 
-Hotel Policies & Info:
-- Check-in time: 3:00 PM | Check-out time: 12:00 PM
-- Payment Methods: Credit/Debit Card (Stripe), GCash, Maya, Bank Transfer, or Cash upon Check-in
-- Cancellation Policy: Free cancellation up to 48 hours before check-in.
-- Amenities Included: High-speed Wi-Fi, Swimming Pool access, Fitness Center, 24/7 Room Service, Complimentary Breakfast.
-- Address: Beachfront Boulevard, Paradise Cove, City Center.
-- Contact Email: support@siladahotel.com | Phone: +63 (2) 8888-7777
+Key Hotel Information:
+- Check-in: 3:00 PM | Check-out: 12:00 PM
+- Cancellation: Free cancellation up to 48 hours before check-in
+- Payment: Credit/Debit Card, GCash, Maya, Bank Transfer, or Cash at check-in
+- Included with stay: High-speed Wi-Fi, Pool & Fitness Center access, Complimentary Luxury Breakfast
+- Location: Beachfront Boulevard, Paradise Cove | Contact: +63 (2) 8888-7777
 
-Your Responsibilities:
-1. Assist guests warmly and professionally with inquiries about room options, pricing, amenities, check-in/out, policies, and special requests.
-2. Recommend the best room based on the guest's needs (e.g. budget, number of guests, desired amenities).
-3. Guide guests on how to book rooms on the Silada website (direct them to the /rooms or /rooms/:id page).
-4. Be concise, polite, helpful, and luxury-oriented in your tone. Use formatting like bullet points when listing rooms. Always state prices in Philippine Pesos (₱).`;
+STRICT CONCISENESS RULES:
+1. EXTREMELY BRIEF: Keep responses strictly under 2 to 3 short sentences (or max 2 brief bullet points). Never send walls of text.
+2. NO GIANT TABLES OR ESSAYS: Answer directly and concisely. Do NOT generate Markdown tables or multiple paragraphs.
+3. ROOM RECOMMENDATIONS: Suggest only 1 or 2 best matching rooms with prices in ₱.
+4. TONE: Warm, elegant, luxury hotel concierge style. Never overwhelm the guest with text.`;
 };
 
 export const chatWithAI = async (history = [], userMessage) => {
@@ -41,16 +45,16 @@ export const chatWithAI = async (history = [], userMessage) => {
 
   const formattedMessages = [
     { role: 'system', content: systemPrompt },
-    ...history.slice(-10).map(m => ({
+    ...history.slice(-6).map((m) => ({
       role: m.role === 'assistant' ? 'assistant' : 'user',
-      content: m.content
+      content: m.content,
     })),
-    { role: 'user', content: userMessage }
+    { role: 'user', content: userMessage },
   ];
 
   const aiReply = await generateAICompletion(formattedMessages, {
-    temperature: 0.7,
-    max_tokens: 800
+    temperature: 0.5,
+    max_tokens: 500,
   });
 
   return aiReply;

@@ -139,45 +139,45 @@ const ChatWidget = () => {
 
       {/* Expanded Chat Window */}
       {isOpen && (
-        <div className="w-[360px] sm:w-[400px] h-[540px] bg-neutral-950 border border-neutral-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="w-[330px] sm:w-[370px] h-[480px] max-h-[82vh] bg-neutral-950 border border-neutral-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl animate-in fade-in slide-in-from-bottom-4 duration-300">
           {/* Header */}
-          <div className="bg-neutral-900 border-b border-neutral-800 p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-neutral-950 font-bold shadow-md shadow-amber-500/20">
-                <FaRobot className="text-lg" />
+          <div className="bg-neutral-900 border-b border-neutral-800 px-3.5 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-neutral-950 font-bold shadow-sm shadow-amber-500/20">
+                <FaRobot className="text-base" />
               </div>
               <div>
-                <h3 className="font-serif font-bold text-neutral-100 text-base flex items-center gap-2">
+                <h3 className="font-serif font-bold text-neutral-100 text-sm flex items-center gap-1.5">
                   Silada AI Concierge
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-sans border border-emerald-500/30">
-                    24/7 Online
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-sans border border-emerald-500/30">
+                    Online
                   </span>
                 </h3>
-                <p className="text-xs text-neutral-400">
+                <p className="text-[11px] text-neutral-400">
                   Powered by {engineInfo.provider}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
               <button
                 onClick={handleClear}
                 title="Clear Chat"
-                className="p-2 text-neutral-400 hover:text-rose-400 hover:bg-neutral-800 rounded-xl transition"
+                className="p-1.5 text-neutral-400 hover:text-rose-400 hover:bg-neutral-800 rounded-lg transition"
               >
-                <FaTrashAlt className="text-sm" />
+                <FaTrashAlt className="text-xs" />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 rounded-xl transition"
+                className="p-1.5 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 rounded-lg transition"
               >
-                <FaTimes className="text-base" />
+                <FaTimes className="text-sm" />
               </button>
             </div>
           </div>
 
           {/* Messages Body */}
-          <div className="flex-1 p-4 overflow-y-auto bg-neutral-950/80 space-y-2 custom-scrollbar">
+          <div className="flex-1 p-3 overflow-y-auto bg-neutral-950/80 space-y-1.5 custom-scrollbar">
             {messages.map((msg, index) => (
               <ChatMessage key={index} message={msg} />
             ))}
