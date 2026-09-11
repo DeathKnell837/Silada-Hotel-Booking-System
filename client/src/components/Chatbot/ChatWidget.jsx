@@ -17,9 +17,25 @@ const ChatWidget = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [engineInfo, setEngineInfo] = useState({
+    provider: 'Groq / Gemini AI',
+    model: '',
+    status: 'online',
+  });
   const messagesEndRef = useRef(null);
 
   const sessionId = getSessionId();
+
+  useEffect(() => {
+    chatbotService
+      .getStatus()
+      .then((res) => {
+        if (res.data?.provider) {
+          setEngineInfo(res.data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const quickPrompts = [
     'What rooms are available?',
@@ -78,11 +94,12 @@ const ChatWidget = () => {
         setMessages(res.data.messages);
       }
     } catch (err) {
+      const errorDetail = err.response?.data?.message || err.message || 'Unable to connect to AI service';
       setMessages((prev) => [
         ...prev,
         {
           role: 'assistant',
-          content: 'Sorry, I am having trouble connecting right now. Please try again or contact support@siladahotel.com.',
+          content: `⚠️ **AI Service Error:** ${errorDetail}`,
           timestamp: new Date(),
         },
       ]);
@@ -136,7 +153,9 @@ const ChatWidget = () => {
                     24/7 Online
                   </span>
                 </h3>
-                <p className="text-xs text-neutral-400">Powered by Groq Llama 3.3</p>
+                <p className="text-xs text-neutral-400">
+                  Powered by {engineInfo.provider}
+                </p>
               </div>
             </div>
 

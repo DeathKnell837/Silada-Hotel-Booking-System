@@ -29,6 +29,7 @@ export const chatbotService = {
   sendMessage: (sessionId, message) => api.post('/chatbot/message', { sessionId, message }),
   getHistory: (sessionId) => api.get(`/chatbot/history/${sessionId}`),
   clearHistory: (sessionId) => api.delete(`/chatbot/history/${sessionId}`),
+  getStatus: () => api.get('/chatbot/status'),
 };
 
 export const reviewService = {

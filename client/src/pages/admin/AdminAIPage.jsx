@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaRobot, FaSmile, FaChartLine, FaShieldAlt, FaComments } from 'react-icons/fa';
-import { reviewService, pricingService, anomalyService } from '../../services/dataService';
+import { reviewService, pricingService, anomalyService, chatbotService } from '../../services/dataService';
 
 const AdminAIPage = () => {
   const [sentimentData, setSentimentData] = useState(null);
   const [forecastData, setForecastData] = useState([]);
   const [anomalyAlerts, setAnomalyAlerts] = useState([]);
+  const [aiEngineStatus, setAiEngineStatus] = useState({ provider: 'Groq', model: 'openai/gpt-oss-120b', status: 'online' });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAIData = async () => {
       try {
-        const [sentRes, priceRes, anomalyRes] = await Promise.all([
+        const [sentRes, priceRes, anomalyRes, statusRes] = await Promise.all([
           reviewService.getInsights().catch(() => ({ data: null })),
           pricingService.getForecast().catch(() => ({ data: [] })),
           anomalyService.getAlerts().catch(() => ({ data: [] })),
+          chatbotService.getStatus().catch(() => ({ data: null })),
         ]);
 
         setSentimentData(sentRes.data);
         setForecastData(priceRes.data || []);
         setAnomalyAlerts(anomalyRes.data || []);
+        if (statusRes.data?.provider) {
+          setAiEngineStatus(statusRes.data);
+        }
       } catch (err) {
         console.error('Error loading AI dashboard data:', err);
       } finally {
@@ -123,12 +128,14 @@ const AdminAIPage = () => {
                 <FaComments className="text-lg" />
               </div>
             </div>
-            <div className="text-3xl font-bold font-serif text-sky-400">
-              Groq Llama <span className="text-sm font-sans font-normal text-neutral-500">3.3 70B</span>
+            <div className="text-2xl font-bold font-serif text-sky-400">
+              {aiEngineStatus.provider}
             </div>
-            <p className="text-xs text-neutral-400 mt-2">24/7 natural language room search active</p>
-            <span className="mt-4 text-xs font-semibold text-emerald-400 flex items-center gap-1">
-              ● Engine Online
+            <p className="text-xs text-neutral-400 mt-1 font-mono truncate" title={aiEngineStatus.model}>
+              {aiEngineStatus.model}
+            </p>
+            <span className={`mt-3 text-xs font-semibold flex items-center gap-1 ${aiEngineStatus.status === 'online' ? 'text-emerald-400' : 'text-amber-400'}`}>
+              ● Engine {aiEngineStatus.status === 'online' ? 'Online' : 'Local Fallback'}
             </span>
           </div>
         </div>

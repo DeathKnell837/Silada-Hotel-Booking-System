@@ -1,5 +1,6 @@
 import ChatHistory from '../models/ChatHistory.js';
 import { chatWithAI } from '../services/chatbotService.js';
+import { getAIStatus } from '../services/aiService.js';
 
 export const sendMessage = async (req, res) => {
   try {
@@ -65,6 +66,15 @@ export const clearHistory = async (req, res) => {
     const { sessionId } = req.params;
     await ChatHistory.deleteOne({ sessionId });
     res.json({ message: 'Chat history cleared' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getStatus = async (req, res) => {
+  try {
+    const status = getAIStatus();
+    res.json(status);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

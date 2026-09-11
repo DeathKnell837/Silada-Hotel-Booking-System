@@ -1,5 +1,5 @@
 import Room from '../models/Room.js';
-import { generateCompletion } from './groqService.js';
+import { generateAICompletion } from './aiService.js';
 
 export const buildSystemPrompt = async () => {
   let roomDetailsText = '';
@@ -48,7 +48,7 @@ export const chatWithAI = async (history = [], userMessage) => {
     { role: 'user', content: userMessage }
   ];
 
-  const aiReply = await generateCompletion(formattedMessages, {
+  const aiReply = await generateAICompletion(formattedMessages, {
     temperature: 0.7,
     max_tokens: 800
   });
