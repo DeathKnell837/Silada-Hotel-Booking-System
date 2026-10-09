@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaRobot, FaTimes, FaPaperPlane, FaTrashAlt, FaCommentDots } from 'react-icons/fa';
-import { chatbotService } from '../../services/dataService';
+import { chatbotService, roomService } from '../../services/dataService';
 import ChatMessage from './ChatMessage';
 
 const getSessionId = () => {
@@ -15,10 +15,11 @@ const getSessionId = () => {
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [engineInfo, setEngineInfo] = useState({
-    provider: 'Groq / Gemini AI',
+    provider: 'Google Gemini AI',
     model: '',
     status: 'online',
   });
@@ -32,6 +33,15 @@ const ChatWidget = () => {
       .then((res) => {
         if (res.data?.provider) {
           setEngineInfo(res.data);
+        }
+      })
+      .catch(() => {});
+
+    roomService
+      .getAll()
+      .then((res) => {
+        if (res.data) {
+          setRooms(res.data);
         }
       })
       .catch(() => {});
@@ -64,12 +74,12 @@ const ChatWidget = () => {
       if (res.data?.messages?.length > 0) {
         setMessages(res.data.messages);
       } else {
-        // Welcome message
+        // Welcome message with smart shortcuts
         setMessages([
           {
             role: 'assistant',
             content:
-              '👋 Welcome to **Silada Luxury Hotel & Resort**! I am your AI Virtual Concierge. How may I assist your stay today?',
+              '👋 Welcome to **Silada Luxury Hotel & Resort**! I am your AI Virtual Concierge. How may I assist your stay today?\n\nExplore our resort: [Browse All Rooms](/rooms) or view [My Profile & Bookings](/profile).',
             timestamp: new Date(),
           },
         ]);
@@ -114,7 +124,7 @@ const ChatWidget = () => {
       setMessages([
         {
           role: 'assistant',
-          content: 'Chat history cleared. How can I help you next?',
+          content: 'Chat history cleared. How can I help you next?\n\n[Browse All Rooms](/rooms)',
           timestamp: new Date(),
         },
       ]);
@@ -179,7 +189,7 @@ const ChatWidget = () => {
           {/* Messages Body */}
           <div className="flex-1 p-3 overflow-y-auto bg-neutral-950/80 space-y-1.5 custom-scrollbar">
             {messages.map((msg, index) => (
-              <ChatMessage key={index} message={msg} />
+              <ChatMessage key={index} message={msg} rooms={rooms} />
             ))}
 
             {loading && (
