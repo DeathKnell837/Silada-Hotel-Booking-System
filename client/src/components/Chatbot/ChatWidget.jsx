@@ -86,6 +86,14 @@ const ChatWidget = () => {
       }
     } catch (err) {
       console.error('Error loading chat history:', err);
+      setMessages([
+        {
+          role: 'assistant',
+          content:
+            '👋 Welcome to **Silada Luxury Hotel & Resort**! I am your AI Virtual Concierge. How may I assist your stay today?\n\nExplore our resort: [Browse All Rooms](/rooms) or view [My Profile & Bookings](/profile).',
+          timestamp: new Date(),
+        },
+      ]);
     }
   };
 
