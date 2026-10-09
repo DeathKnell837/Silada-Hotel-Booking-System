@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FaArrowLeft,
   FaCalendarAlt,
+  FaChevronDown,
   FaSignInAlt,
   FaSignOutAlt,
   FaSearch,
@@ -53,6 +54,7 @@ const isStayingOnDate = (checkInVal, checkOutVal, targetDateStr) => {
 const ManageBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dateInputRef = useRef(null);
 
   // Filters
   const [statusFilter, setStatusFilter] = useState('all');
@@ -228,52 +230,75 @@ const ManageBookings = () => {
         <div className="glass-card rounded-xl p-2.5 mb-6 flex flex-wrap items-center justify-between gap-2.5 border border-gold/15 bg-dark-surface/40">
           {/* Left Controls: Date Picker, Movement Filter, Status Dropdown, and Inline Counters */}
           <div className="flex flex-wrap items-center gap-2">
-            {/* 1. Date Picker */}
-            <div className="flex items-center gap-1 bg-dark border border-dark-lighter rounded-lg px-2.5 py-1.5 focus-within:border-gold transition-colors">
-              <FaCalendarAlt className="text-gold text-xs" />
+            {/* 1. Date Picker with its own centered icon room */}
+            <div className="relative inline-flex items-center bg-dark border border-dark-lighter rounded-lg overflow-hidden focus-within:border-gold transition-colors">
               <input
+                ref={dateInputRef}
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent text-xs text-white focus:outline-none cursor-pointer"
+                className="bg-transparent pl-2.5 pr-1 py-1.5 text-xs text-white focus:outline-none cursor-pointer [&::-webkit-calendar-picker-indicator]:hidden"
                 title="Filter by date"
               />
               {selectedDate && (
                 <button
                   type="button"
                   onClick={() => setSelectedDate('')}
-                  className="text-gray-400 hover:text-red-400 text-xs ml-1 transition-colors"
+                  className="px-1.5 py-1.5 text-gray-400 hover:text-red-400 text-xs transition-colors"
                   title="Clear Date"
                 >
-                  <FaTimes />
+                  <FaTimes className="text-[10px]" />
                 </button>
               )}
+              <div
+                onClick={() => {
+                  try {
+                    dateInputRef.current?.showPicker?.();
+                  } catch {
+                    dateInputRef.current?.focus();
+                  }
+                }}
+                className="w-7 self-stretch border-l border-dark-lighter flex items-center justify-center text-gold bg-dark-light/40 hover:bg-gold/15 cursor-pointer transition-colors"
+                title="Open calendar"
+              >
+                <FaCalendarAlt className="text-[11px]" />
+              </div>
             </div>
 
-            {/* 2. Schedule Movement Dropdown */}
-            <select
-              value={dateFilterType}
-              onChange={(e) => setDateFilterType(e.target.value)}
-              className="bg-dark border border-dark-lighter rounded-lg px-2.5 py-1.5 text-xs text-gray-200 focus:border-gold focus:outline-none cursor-pointer"
-            >
-              <option value="all">Schedule: All</option>
-              <option value="checkIn">Check-Ins (Arrivals)</option>
-              <option value="checkOut">Check-Outs (Departures)</option>
-              <option value="staying">In-House Stays</option>
-            </select>
+            {/* 2. Schedule Movement Dropdown with centered arrow in its own room */}
+            <div className="relative inline-flex items-center bg-dark border border-dark-lighter rounded-lg overflow-hidden focus-within:border-gold transition-colors">
+              <select
+                value={dateFilterType}
+                onChange={(e) => setDateFilterType(e.target.value)}
+                className="appearance-none bg-transparent pl-2.5 pr-8 py-1.5 text-xs text-gray-200 focus:outline-none cursor-pointer"
+              >
+                <option value="all">Schedule: All</option>
+                <option value="checkIn">Check-Ins (Arrivals)</option>
+                <option value="checkOut">Check-Outs (Departures)</option>
+                <option value="staying">In-House Stays</option>
+              </select>
+              <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-7 border-l border-dark-lighter flex items-center justify-center text-gray-400 bg-dark-light/40">
+                <FaChevronDown className="text-[9px]" />
+              </div>
+            </div>
 
-            {/* 3. Status Dropdown */}
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-dark border border-dark-lighter rounded-lg px-2.5 py-1.5 text-xs text-gray-200 focus:border-gold focus:outline-none cursor-pointer"
-            >
-              <option value="all">Status: All ({statusCounts.all})</option>
-              <option value="pending">Pending ({statusCounts.pending})</option>
-              <option value="confirmed">Confirmed ({statusCounts.confirmed})</option>
-              <option value="completed">Completed ({statusCounts.completed})</option>
-              <option value="cancelled">Cancelled ({statusCounts.cancelled})</option>
-            </select>
+            {/* 3. Status Dropdown with centered arrow in its own room */}
+            <div className="relative inline-flex items-center bg-dark border border-dark-lighter rounded-lg overflow-hidden focus-within:border-gold transition-colors">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="appearance-none bg-transparent pl-2.5 pr-8 py-1.5 text-xs text-gray-200 focus:outline-none cursor-pointer"
+              >
+                <option value="all">Status: All ({statusCounts.all})</option>
+                <option value="pending">Pending ({statusCounts.pending})</option>
+                <option value="confirmed">Confirmed ({statusCounts.confirmed})</option>
+                <option value="completed">Completed ({statusCounts.completed})</option>
+                <option value="cancelled">Cancelled ({statusCounts.cancelled})</option>
+              </select>
+              <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-7 border-l border-dark-lighter flex items-center justify-center text-gray-400 bg-dark-light/40">
+                <FaChevronDown className="text-[9px]" />
+              </div>
+            </div>
 
             {/* 4. Compact Live Counts Pill ("Pila mag-hawa ug pila nag-book") */}
             {selectedDate && (
