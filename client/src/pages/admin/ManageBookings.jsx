@@ -225,11 +225,11 @@ const ManageBookings = () => {
         {/* ======================================================== */}
         {/* COMPACT OPTIMIZED FILTER & SEARCH TOOLBAR                 */}
         {/* ======================================================== */}
-        <div className="glass-card rounded-xl p-3 mb-6 flex flex-wrap items-center justify-between gap-3 border border-gold/15 bg-dark-surface/40">
+        <div className="glass-card rounded-xl p-2.5 mb-6 flex flex-wrap items-center justify-between gap-2.5 border border-gold/15 bg-dark-surface/40">
           {/* Left Controls: Date Picker, Movement Filter, Status Dropdown, and Inline Counters */}
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2">
             {/* 1. Date Picker */}
-            <div className="flex items-center gap-1.5 bg-dark border border-dark-lighter rounded-lg px-2.5 py-1.5 focus-within:border-gold transition-colors">
+            <div className="flex items-center gap-1 bg-dark border border-dark-lighter rounded-lg px-2.5 py-1.5 focus-within:border-gold transition-colors">
               <FaCalendarAlt className="text-gold text-xs" />
               <input
                 type="date"
@@ -254,19 +254,19 @@ const ManageBookings = () => {
             <select
               value={dateFilterType}
               onChange={(e) => setDateFilterType(e.target.value)}
-              className="bg-dark border border-dark-lighter rounded-lg px-3 py-2 text-xs text-gray-200 focus:border-gold focus:outline-none cursor-pointer"
+              className="bg-dark border border-dark-lighter rounded-lg px-2.5 py-1.5 text-xs text-gray-200 focus:border-gold focus:outline-none cursor-pointer"
             >
-              <option value="all">Schedule: All Movements</option>
-              <option value="checkIn">Check-Ins (Arrivals / Nag-book)</option>
-              <option value="checkOut">Check-Outs (Departures / Mag-hawa)</option>
-              <option value="staying">In-House Stays Only</option>
+              <option value="all">Schedule: All</option>
+              <option value="checkIn">Check-Ins (Arrivals)</option>
+              <option value="checkOut">Check-Outs (Departures)</option>
+              <option value="staying">In-House Stays</option>
             </select>
 
-            {/* 3. Status Dropdown (Replacing old bulky tabs) */}
+            {/* 3. Status Dropdown */}
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-dark border border-dark-lighter rounded-lg px-3 py-2 text-xs text-gray-200 focus:border-gold focus:outline-none cursor-pointer"
+              className="bg-dark border border-dark-lighter rounded-lg px-2.5 py-1.5 text-xs text-gray-200 focus:border-gold focus:outline-none cursor-pointer"
             >
               <option value="all">Status: All ({statusCounts.all})</option>
               <option value="pending">Pending ({statusCounts.pending})</option>
@@ -277,23 +277,23 @@ const ManageBookings = () => {
 
             {/* 4. Compact Live Counts Pill ("Pila mag-hawa ug pila nag-book") */}
             {selectedDate && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-dark/70 border border-gold/25 text-xs">
+              <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-dark/80 border border-gold/25 text-xs">
                 <span className="text-emerald-400 font-medium flex items-center gap-1">
-                  <FaSignInAlt className="text-[10px]" /> Check-Ins: <strong>{stats.checkInsCount}</strong>
+                  <FaSignInAlt className="text-[10px]" /> In: <strong>{stats.checkInsCount}</strong>
                 </span>
                 <span className="text-gray-500">•</span>
                 <span className="text-amber-400 font-medium flex items-center gap-1">
-                  <FaSignOutAlt className="text-[10px]" /> Check-Outs: <strong>{stats.checkOutsCount}</strong>
+                  <FaSignOutAlt className="text-[10px]" /> Out: <strong>{stats.checkOutsCount}</strong>
                 </span>
               </div>
             )}
 
-            {/* Reset Button (only shown when any filter is active) */}
+            {/* Reset Button */}
             {isFilterActive && (
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="px-2.5 py-1.5 text-xs text-gold hover:text-white rounded-lg hover:bg-gold/10 flex items-center gap-1 transition-colors"
+                className="px-2 py-1 text-xs text-gold hover:text-white rounded-lg hover:bg-gold/10 flex items-center gap-1 transition-colors"
                 title="Reset all filters"
               >
                 <FaUndo className="text-[10px]" /> Reset
@@ -309,13 +309,13 @@ const ManageBookings = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search guest or room..."
-                className="bg-dark border border-dark-lighter rounded-l-lg pl-3 pr-7 py-2 text-xs text-white placeholder-gray-500 focus:border-gold focus:outline-none w-48 sm:w-64 transition-all"
+                className="bg-dark border border-dark-lighter rounded-l-lg pl-3 pr-7 py-1.5 text-xs text-white placeholder-gray-500 focus:border-gold focus:outline-none w-36 sm:w-48 transition-all"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2 top-2.5 text-xs text-gray-400 hover:text-white"
+                  className="absolute right-2 top-2 text-xs text-gray-400 hover:text-white"
                 >
                   <FaTimes />
                 </button>
@@ -323,9 +323,9 @@ const ManageBookings = () => {
             </div>
             <button
               type="button"
-              className="bg-gold text-dark px-3 py-2 rounded-r-lg text-xs font-semibold hover:bg-gold-light transition-colors flex items-center gap-1.5 border border-gold"
+              className="bg-gold text-dark px-3 py-1.5 rounded-r-lg text-xs font-semibold hover:bg-gold-light transition-colors flex items-center gap-1 border border-gold"
             >
-              <FaSearch className="text-[11px]" /> Search
+              <FaSearch className="text-[10px]" /> Search
             </button>
           </div>
         </div>
